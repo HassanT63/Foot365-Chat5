@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Foot365</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&display=swap" rel="stylesheet">
+  <title>Comparateur - Foot365</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/favicon.png" type="image/png">
 </head>
 <body>
@@ -21,10 +21,40 @@
     </nav>
   </header>
   <section class="section">
-    <h2>Comparateur</h2><p>Compare les joueurs ou clubs selon les critères de ton choix.</p>
+    
+<h2>Comparateur : Mbappé vs Haaland (2024)</h2>
+<div id="comparateur">Chargement...</div>
+<script>
+const ids = [
+  { id: 276, nom: "Mbappé" },
+  { id: 278, nom: "Haaland" }
+];
+
+Promise.all(ids.map(player =>
+  fetch(`https://api-football-v1.p.rapidapi.com/v3/players/statistics?player=${player.id}&season=2024`, {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": "237b2d3a60msh8f2afd0d43b26a4p1a4b15jsn75ad0ee354b5",
+      "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+    }
+  }).then(res => res.json())
+)).then(results => {
+  const container = document.getElementById("comparateur");
+  container.innerHTML = "<table><tr><th>Stat</th><th>Mbappé</th><th>Haaland</th></tr>";
+  const [mbappe, haaland] = results.map(r => r.response);
+  container.innerHTML += `
+    <tr><td>Buts</td><td>${mbappe.goals.total}</td><td>${haaland.goals.total}</td></tr>
+    <tr><td>xG</td><td>${mbappe.shots.expected}</td><td>${haaland.shots.expected}</td></tr>
+    <tr><td>Dribbles</td><td>${mbappe.dribbles.success}</td><td>${haaland.dribbles.success}</td></tr>
+  `;
+  container.innerHTML += "</table>";
+})
+.catch(err => document.getElementById("comparateur").innerText = "Erreur de chargement.");
+</script>
+
   </section>
   <footer>
-    &copy; 2025 Foot365 – Données dynamiques à venir.
+    &copy; 2025 Foot365 – Données dynamiques API-Football.
   </footer>
 </body>
 </html>
