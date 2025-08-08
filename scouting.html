@@ -1,17 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scouting - Foot365</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1><a href="index.html"><img src="assets/logo.png" alt="Foot365" height="30"></a></h1>
+    <h1>Foot365</h1>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="clubs.html">Clubs</a>
@@ -22,8 +19,8 @@
   </header>
   <section class="section">
     
-<h2>Jeunes talents à suivre</h2>
-<div id="prospects">Chargement...</div>
+<h2>Jeunes talents -21 ans</h2>
+<div id="scouting">Chargement...</div>
 <script>
 fetch("https://api-football-v1.p.rapidapi.com/v3/players?season=2024&age=21&page=1", {
   method: "GET",
@@ -32,20 +29,25 @@ fetch("https://api-football-v1.p.rapidapi.com/v3/players?season=2024&age=21&page
     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
   }
 })
-.then(res => res.json())
-.then(data => {
-  const container = document.getElementById("prospects");
-  container.innerHTML = "";
-  data.response.slice(0, 5).forEach(player => {
-    container.innerHTML += `<p><strong>${player.player.name}</strong> (${player.statistics[0].team.name}) - Âge : ${player.player.age}</p>`;
+.then(r => r.json())
+.then(d => {
+  const list = d.response.slice(0,5);
+  const div = document.getElementById("scouting");
+  div.innerHTML = "";
+  list.forEach(p => {
+    div.innerHTML += `<p><strong>${p.player.name}</strong> (${
+      p.statistics[0].team.name
+    }) - Âge : ${p.player.age}</p>`;
   });
 })
-.catch(err => document.getElementById("prospects").innerText = "Erreur de chargement.");
+.catch(() => {
+  document.getElementById("scouting").innerText = "Erreur de chargement.";
+});
 </script>
 
   </section>
   <footer>
-    &copy; 2025 Foot365 – Données dynamiques API-Football.
+    &copy; 2025 Foot365 — Données en direct avec API-Football.
   </footer>
 </body>
 </html>

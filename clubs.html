@@ -1,17 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clubs - Foot365</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1><a href="index.html"><img src="assets/logo.png" alt="Foot365" height="30"></a></h1>
+    <h1>Foot365</h1>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="clubs.html">Clubs</a>
@@ -22,7 +19,7 @@
   </header>
   <section class="section">
     
-<h2>Classement Ligue 1 (2024/2025)</h2>
+<h2>Classement Ligue 1</h2>
 <div id="classement">Chargement...</div>
 <script>
 fetch("https://api-football-v1.p.rapidapi.com/v3/standings?season=2024&league=61", {
@@ -32,22 +29,25 @@ fetch("https://api-football-v1.p.rapidapi.com/v3/standings?season=2024&league=61
     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
   }
 })
-.then(res => res.json())
+.then(r => r.json())
 .then(data => {
   const teams = data.response[0].league.standings[0];
-  const container = document.getElementById("classement");
-  container.innerHTML = "<table><tr><th>#</th><th>Club</th><th>Pts</th></tr>";
-  teams.forEach(team => {
-    container.innerHTML += `<tr><td>${team.rank}</td><td>${team.team.name}</td><td>${team.points}</td></tr>`;
+  const div = document.getElementById("classement");
+  let html = "<table><tr><th>#</th><th>Club</th><th>Points</th></tr>";
+  teams.forEach(t => {
+    html += `<tr><td>${t.rank}</td><td>${t.team.name}</td><td>${t.points}</td></tr>`;
   });
-  container.innerHTML += "</table>";
+  html += "</table>";
+  div.innerHTML = html;
 })
-.catch(err => document.getElementById("classement").innerText = "Erreur de chargement.");
+.catch(e => {
+  document.getElementById("classement").innerText = "Erreur de chargement.";
+});
 </script>
 
   </section>
   <footer>
-    &copy; 2025 Foot365 – Données dynamiques API-Football.
+    &copy; 2025 Foot365 — Données en direct avec API-Football.
   </footer>
 </body>
 </html>

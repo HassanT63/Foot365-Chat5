@@ -1,17 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Comparateur - Foot365</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1><a href="index.html"><img src="assets/logo.png" alt="Foot365" height="30"></a></h1>
+    <h1>Foot365</h1>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="clubs.html">Clubs</a>
@@ -22,39 +19,39 @@
   </header>
   <section class="section">
     
-<h2>Comparateur : Mbappé vs Haaland (2024)</h2>
-<div id="comparateur">Chargement...</div>
+<h2>Comparateur : Mbappé vs Haaland</h2>
+<div id="compare">Chargement...</div>
 <script>
-const ids = [
+const joueurs = [
   { id: 276, nom: "Mbappé" },
   { id: 278, nom: "Haaland" }
 ];
-
-Promise.all(ids.map(player =>
-  fetch(`https://api-football-v1.p.rapidapi.com/v3/players/statistics?player=${player.id}&season=2024`, {
+Promise.all(joueurs.map(j =>
+  fetch(`https://api-football-v1.p.rapidapi.com/v3/players/statistics?player=${j.id}&season=2024`, {
     method: "GET",
     headers: {
       "X-RapidAPI-Key": "237b2d3a60msh8f2afd0d43b26a4p1a4b15jsn75ad0ee354b5",
       "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
     }
-  }).then(res => res.json())
-)).then(results => {
-  const container = document.getElementById("comparateur");
-  container.innerHTML = "<table><tr><th>Stat</th><th>Mbappé</th><th>Haaland</th></tr>";
-  const [mbappe, haaland] = results.map(r => r.response);
-  container.innerHTML += `
-    <tr><td>Buts</td><td>${mbappe.goals.total}</td><td>${haaland.goals.total}</td></tr>
-    <tr><td>xG</td><td>${mbappe.shots.expected}</td><td>${haaland.shots.expected}</td></tr>
-    <tr><td>Dribbles</td><td>${mbappe.dribbles.success}</td><td>${haaland.dribbles.success}</td></tr>
-  `;
-  container.innerHTML += "</table>";
+  }).then(r => r.json())
+)).then(result => {
+  const [m, h] = result.map(r => r.response);
+  const html = `
+    <table><tr><th>Stat</th><th>Mbappé</th><th>Haaland</th></tr>
+    <tr><td>Buts</td><td>${m.goals.total}</td><td>${h.goals.total}</td></tr>
+    <tr><td>xG</td><td>${m.shots.expected}</td><td>${h.shots.expected}</td></tr>
+    <tr><td>Dribbles</td><td>${m.dribbles.success}</td><td>${h.dribbles.success}</td></tr>
+    </table>`;
+  document.getElementById("compare").innerHTML = html;
 })
-.catch(err => document.getElementById("comparateur").innerText = "Erreur de chargement.");
+.catch(() => {
+  document.getElementById("compare").innerText = "Erreur de chargement.";
+});
 </script>
 
   </section>
   <footer>
-    &copy; 2025 Foot365 – Données dynamiques API-Football.
+    &copy; 2025 Foot365 — Données en direct avec API-Football.
   </footer>
 </body>
 </html>

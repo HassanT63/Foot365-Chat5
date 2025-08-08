@@ -1,17 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Joueurs - Foot365</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1><a href="index.html"><img src="assets/logo.png" alt="Foot365" height="30"></a></h1>
+    <h1>Foot365</h1>
     <nav>
       <a href="index.html">Accueil</a>
       <a href="clubs.html">Clubs</a>
@@ -22,8 +19,8 @@
   </header>
   <section class="section">
     
-<h2>Statistiques - Kylian Mbappé (2024)</h2>
-<div id="player-stats">Chargement...</div>
+<h2>Stats - Kylian Mbappé</h2>
+<div id="stats">Chargement...</div>
 <script>
 fetch("https://api-football-v1.p.rapidapi.com/v3/players/statistics?player=276&season=2024&team=85", {
   method: "GET",
@@ -32,24 +29,25 @@ fetch("https://api-football-v1.p.rapidapi.com/v3/players/statistics?player=276&s
     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
   }
 })
-.then(res => res.json())
-.then(data => {
-  const stats = data.response;
-  const container = document.getElementById("player-stats");
-  container.innerHTML = `
-    <p><strong>Buts :</strong> ${stats.goals.total}</p>
-    <p><strong>Passes décisives :</strong> ${stats.goals.assists}</p>
-    <p><strong>Tirs :</strong> ${stats.shots.total} (${stats.shots.on} cadrés)</p>
-    <p><strong>xG :</strong> ${stats.shots.expected}</p>
-    <p><strong>Dribbles réussis :</strong> ${stats.dribbles.success} / ${stats.dribbles.attempts}</p>
+.then(r => r.json())
+.then(d => {
+  const s = d.response;
+  document.getElementById("stats").innerHTML = `
+    <p>Buts : ${s.goals.total}</p>
+    <p>Passes : ${s.goals.assists}</p>
+    <p>Tirs cadrés : ${s.shots.on} / ${s.shots.total}</p>
+    <p>xG : ${s.shots.expected}</p>
+    <p>Dribbles : ${s.dribbles.success} / ${s.dribbles.attempts}</p>
   `;
 })
-.catch(err => document.getElementById("player-stats").innerText = "Erreur de chargement.");
+.catch(() => {
+  document.getElementById("stats").innerText = "Erreur de chargement.";
+});
 </script>
 
   </section>
   <footer>
-    &copy; 2025 Foot365 – Données dynamiques API-Football.
+    &copy; 2025 Foot365 — Données en direct avec API-Football.
   </footer>
 </body>
 </html>
