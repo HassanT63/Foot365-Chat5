@@ -150,25 +150,9 @@
         <h4>🧠 À suivre</h4>
         <p><strong>Warren Zaïre-Emery</strong><br>18 ans, impact progressif élevé</p>
       </div>
-    </div>
-  </section>
-  <section class="section">
-    <h3>🔍 Accès rapides</h3>
-    <div class="card-grid">
       <div class="card">
-        <h4>Stats Clubs</h4>
-        <p>Classements, xG, PPDA, forme actuelle.</p>
-        <button class="btn">Explorer</button>
-      </div>
-      <div class="card">
-        <h4>Stats Joueurs</h4>
-        <p>xG, xA, dribbles, style, profils comparés.</p>
-        <button class="btn">Comparer</button>
-      </div>
-      <div class="card">
-        <h4>Scouting</h4>
-        <p>Jeunes talents, profils prometteurs, fiches dynamiques.</p>
-        <button class="btn">Découvrir</button>
+        <h4>🕒 Matchs du jour</h4>
+        <div id="matchs-du-jour"><p>Chargement...</p></div>
       </div>
     </div>
   </section>
@@ -184,6 +168,35 @@
     function scrollToSection(id) {
       document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
     }
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    fetch("https://api-football-v1.p.rapidapi.com/v3/fixtures?date=" + today, {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "237b2d3a60msh8f2afd0d43b26a4p1a4b15jsn75ad0ee354b5",
+        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById("matchs-du-jour");
+      container.innerHTML = "";
+      if (data.response.length === 0) {
+        container.innerHTML = "<p>Aucun match aujourd'hui.</p>";
+      } else {
+        data.response.slice(0, 5).forEach(match => {
+          const home = match.teams.home.name;
+          const away = match.teams.away.name;
+          const time = new Date(match.fixture.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          container.innerHTML += `<p><strong>${home}</strong> vs <strong>${away}</strong> à ${time}</p>`;
+        });
+      }
+    })
+    .catch(error => {
+      document.getElementById("matchs-du-jour").innerHTML = "<p>Erreur lors du chargement des matchs.</p>";
+      console.error("Erreur API-Football :", error);
+    });
   </script>
 </body>
 </html>
